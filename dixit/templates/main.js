@@ -402,10 +402,9 @@ $(document).ready(function() {
 
 
     // Change either the current cards or the user's hand
-    function cardCell(card, hack) {
-        return '<div class="card magnifier" id="' + card.cid + '" hack="' + hack + '">'
+    function cardCell(card) {
+        return '<div class="card" id="' + card.cid + '">'
               + '<img class="small" src="' + card.url + '" />'
-              + '<div class="large" style="background-image:url(\'' + card.url + '\')"></div>'
               + '</div>';
     }
     function updateCards(cards, containerId) {
@@ -415,10 +414,9 @@ $(document).ready(function() {
         }
         var html = [];
         $.each(cards, function(i, card) {
-            html.push(cardCell(card, containerId == '#hand'));
+            html.push(cardCell(card));
         });
         $(containerId).html(html.join('')).fadeIn();
-        $('.card').mousemove(magnifyHandler).mouseout(magnifyHandler);
     }
 
 
