@@ -1,5 +1,8 @@
 """Holds template variables for HTML/JS/CSS."""
 
+import math
+from enum import StrEnum
+
 from dixit.utils import url_join
 
 
@@ -50,30 +53,34 @@ class Sizes:
     TOKEN = 80
 
 
-class BunnyPalette:
+class BunnyPalette(StrEnum):
     """Bunny colours to choose from."""
 
+    LIGHT_PURPLE = "d499ff"
+    PURPLE = "a41bf3"
     RED = "c52828"
+    PINK = "f299b1"
     ORANGE = "e59100"
     YELLOW = "e2e05d"
-    GREEN = "12751b"
+    BROWN = "a18332"
+    LIGHT_GREEN = "b5e8c4"
+    GREEN = "66bd28"
+    DARK_GREEN = "12751b"
     BLUE = "214ddc"
-    PURPLE = "a41bf3"
-    PINK = "d2638d"
-    WHITE = "d3ceca"
-    BLACK = "3a363b"
+    CYAN = "1bbdbf"
+    WHITE = "fafafa"
+    LIGHT_GRAY = "b5b5b5"
+    DARK_GRAY = "6e6e6e"
+    BLACK = "222222"
 
     @classmethod
     def is_colour(cls, cid):
         """Determines if the given colour id is valid."""
-        return cid in (
-            cls.RED,
-            cls.ORANGE,
-            cls.YELLOW,
-            cls.GREEN,
-            cls.BLUE,
-            cls.PURPLE,
-            cls.PINK,
-            cls.WHITE,
-            cls.BLACK,
-        )
+        return cid in cls._value2member_map_
+
+    @classmethod
+    def grid(cls):
+        """Arranges the colours into near-square rows for display."""
+        colours = list(cls)
+        cols = math.ceil(math.sqrt(len(colours)))
+        return [colours[i : i + cols] for i in range(0, len(colours), cols)]

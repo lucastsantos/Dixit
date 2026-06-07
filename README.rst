@@ -10,6 +10,8 @@ This repository is a fork of `arvoelke/Dixit <https://github.com/arvoelke/Dixit/
   through pre-commit hooks.
 - **Continuous integration:** GitHub Actions.
 - **Containerization:** ``Dockerfile`` and ``docker-compose.yml``.
+- **UI:** Removed the magnifying-glass hover effect on cards.
+- **Game logic:** Players are now prevented from voting for their own card during the vote phase.
 
 .. figure:: http://i.imgur.com/y5Zv9Az.png
    :alt: Revealing the correct card
