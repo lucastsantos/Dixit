@@ -320,6 +320,8 @@ class Game:
             raise APIError(Codes.VOTE_INVALID)
         if self.round.has_voted(user):
             raise APIError(Codes.VOTE_ALREADY)
+        if self.round.user_to_card.get(user) == card:
+            raise APIError(Codes.VOTE_INVALID)
         self.round.cast_vote(user, card)
         if self.round.has_everyone_voted():
             # Transition from VOTE to CLUE or END.

@@ -76,6 +76,7 @@ $(document).ready(function() {
     var handHash = undefined;  // hash of most recently rendered hand, or undefined
     var cardsHash = undefined;  // hash of most recently rendered current cards, or undefined
     var votesHash = undefined;  // hash of most recently revealed votes, or undefined
+    var myPlayedCid = undefined;  // id of the card this user played, so they can't vote for it
     var lastChatUpdate = 0;  // timestamp of most recently retrieved message
 
 
@@ -387,7 +388,10 @@ $(document).ready(function() {
                 $('#hand .card').click(setupActionFormHandler({{ commands.PLAY_CARD }})).addClass('clickable');
             } else if (data.state == {{ states.VOTE }} && data.requiresAction[data.user]) {
                 $('#hand .card').unbind('click').removeClass('clickable');
-                $('#cards .card').click(setupActionFormHandler({{ commands.CAST_VOTE }})).addClass('clickable');
+                var votableCards = myPlayedCid === undefined
+                    ? $('#cards .card')
+                    : $('#cards .card').not('#' + myPlayedCid);  // can't vote for own card
+                votableCards.click(setupActionFormHandler({{ commands.CAST_VOTE }})).addClass('clickable');
             } else {
                 $('.card').unbind('click').removeClass('clickable');
             }
@@ -483,6 +487,9 @@ $(document).ready(function() {
             }
         } else {
             post = 'cid=' + $('#cardId').val();
+            if (cmd == {{ commands.PLAY_CARD }}) {
+                myPlayedCid = $('#cardId').val();  // remember so we can't vote for it
+            }
         }
         $('#actionBox').hide();
         sendCommand(cmd, post, function(data) {
