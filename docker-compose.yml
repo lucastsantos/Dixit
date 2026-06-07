@@ -1,0 +1,14 @@
+services:
+  dixit:
+    build: .
+    ports:
+      - "8888:8888"
+    volumes:
+      # Supply your own card images on the host; they become the default "dixit" deck.
+      - ./cards:/app/dixit/static/cards/dixit
+      # Optional config override. Uncomment BOTH this line and the `command`
+      # below, and create ./config.local.json first (otherwise Docker creates a
+      # directory at that path and startup fails when config.parse opens it).
+      # - ./config.local.json:/app/config.local.json:ro
+    # command: ["dixit", "config.local.json"]
+    restart: unless-stopped

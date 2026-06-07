@@ -228,14 +228,14 @@ class Game:
             raise APIError(Codes.COLOUR_TAKEN)
         if user in self.perma_banned:
             raise APIError(Codes.JOIN_BANNED)
-        if not user in self.players:  # idempotent
+        if user not in self.players:  # idempotent
             self.players[user] = Player(user)
             self.order.append(user)
         self.colours[user] = colour  # alow colour changing
 
     def kick_player(self, user, is_permanent=False):
         """Kicks a user from the game, or throws APIError."""
-        if not user in self.players:
+        if user not in self.players:
             raise APIError(Codes.KICK_UNKNOWN_USER)
         if len(self.players) <= self.limits.min_players and self.state != States.BEGIN:
             raise APIError(Codes.NOT_ENOUGH_PLAYERS)
@@ -292,7 +292,7 @@ class Game:
             raise APIError(Codes.PLAY_BAD_STATE)
         if user == self.clue_maker():
             raise APIError(Codes.PLAY_NOT_TURN)
-        if not user in self.players:
+        if user not in self.players:
             raise APIError(Codes.PLAY_UNKNOWN_USER)
         if self.round.has_played(user):
             raise APIError(Codes.PLAY_ALREADY)
@@ -314,7 +314,7 @@ class Game:
             raise APIError(Codes.VOTE_BAD_STATE)
         if user == self.clue_maker():
             raise APIError(Codes.VOTE_NOT_TURN)
-        if not user in self.players:
+        if user not in self.players:
             raise APIError(Codes.VOTE_UNKNOWN_USER)
         if not self.round.has_card(card):
             raise APIError(Codes.VOTE_INVALID)

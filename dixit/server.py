@@ -114,9 +114,12 @@ class AdminHandler(RequestHandler):
                 stderr = ""
             except Exception as exc:
                 stdout = ""
-                stderr = unicode(exc).encode("utf-8")
+                stderr = str(exc)
         self.write(
-            {"stdout": stdout, "stderr": stderr,}
+            {
+                "stdout": stdout,
+                "stderr": stderr,
+            }
         )
 
 
@@ -242,7 +245,10 @@ class GetUsersHandler(RequestHandler):
         cur_time = time.time()
         for user in self.application.users:
             blob.append(
-                {"name": user.name, "relLastActive": cur_time - user.last_active,}
+                {
+                    "name": user.name,
+                    "relLastActive": cur_time - user.last_active,
+                }
             )
         self.write(json.dumps(sorted(blob, key=lambda x: x["relLastActive"])))
 
@@ -253,7 +259,10 @@ class ChatHandler(RequestHandler):
     def get(self):
         last_time = float(self.get_argument("t"))
         self.write(
-            {"log": self.application.chat_log.dump_since(last_time), "t": time.time(),}
+            {
+                "log": self.application.chat_log.dump_since(last_time),
+                "t": time.time(),
+            }
         )
 
     def post(self):
@@ -415,40 +424,51 @@ class Application(tornado.web.Application):
         super(Application, self).__init__(*args, **kwargs)
 
 
-settings = {
-    "static_path": os.path.join(os.path.dirname(__file__), "static"),
-    "template_path": os.path.join(os.path.dirname(__file__), "templates"),
-    "debug": False,
-}
+ROUTES = [
+    (r"/", MainHandler),
+    (r"/admin", AdminHandler),
+    (r"/main.js", MainJSHandler),
+    (r"/main.css", MainCSSHandler),
+    (r"/setusername", SetUsernameHandler),
+    (r"/create", CreateHandler),
+    (r"/hide", HideHandler),
+    (r"/getgames", GetGamesHandler),
+    (r"/getusers", GetUsersHandler),
+    (r"/game/([0-9]+)/(.+)", GameHandler),
+    (r"/chat", ChatHandler),
+]
 
 default_config_filename = os.path.join(os.path.dirname(__file__), "config.json")
-if len(sys.argv) == 2:
-    override_config_filename = sys.argv[1]
-    logger.info("Overriding configuration using the file: %s", override_config_filename)
-else:
-    override_config_filename = None
-settings.update(config.parse(default_config_filename, override_config_filename))
 
-application = Application(
-    [
-        (r"/", MainHandler),
-        (r"/admin", AdminHandler),
-        (r"/main.js", MainJSHandler),
-        (r"/main.css", MainCSSHandler),
-        (r"/setusername", SetUsernameHandler),
-        (r"/create", CreateHandler),
-        (r"/hide", HideHandler),
-        (r"/getgames", GetGamesHandler),
-        (r"/getusers", GetUsersHandler),
-        (r"/game/([0-9]+)/(.+)", GameHandler),
-        (r"/chat", ChatHandler),
-    ],
-    **settings
-)
+
+def build_settings(override_config_filename=None):
+    """Builds the Tornado settings, optionally merging in an override config."""
+    settings = {
+        "static_path": os.path.join(os.path.dirname(__file__), "static"),
+        "template_path": os.path.join(os.path.dirname(__file__), "templates"),
+        "debug": False,
+    }
+    settings.update(config.parse(default_config_filename, override_config_filename))
+    return settings
+
+
+# Default settings/application (no override). Importing this module never reads
+# argv, so test runners (and other importers) are unaffected by their own CLI args.
+settings = build_settings()
+application = Application(ROUTES, **settings)
 
 
 def start():
-    application.listen(settings["port"])
+    """Starts the server, applying an optional config override from argv[1]."""
+    app, app_settings = application, settings
+    if len(sys.argv) == 2:
+        override_config_filename = sys.argv[1]
+        logger.info(
+            "Overriding configuration using the file: %s", override_config_filename
+        )
+        app_settings = build_settings(override_config_filename)
+        app = Application(ROUTES, **app_settings)
+    app.listen(app_settings["port"])
     tornado.ioloop.IOLoop.instance().start()
 
 

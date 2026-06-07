@@ -1,17 +1,60 @@
+Fork Notice
+-----------
+
+This repository is a fork of `arvoelke/Dixit <https://github.com/arvoelke/Dixit/>`__ with the following changes:
+
+- **Python:** 3.13.
+- **Packaging:** `uv <https://docs.astral.sh/uv/>`__, with a ``pyproject.toml``
+  manifest, a committed ``uv.lock``, and a pinned ``.python-version``.
+- **Formatting & linting:** `ruff <https://docs.astral.sh/ruff/>`__, run
+  through pre-commit hooks.
+- **Continuous integration:** GitHub Actions.
+- **Containerization:** ``Dockerfile`` and ``docker-compose.yml``.
+
 .. figure:: http://i.imgur.com/y5Zv9Az.png
    :alt: Revealing the correct card
 
 Installation
 ------------
 
-``pip install dixit``
+Dixit is developed with `uv <https://docs.astral.sh/uv/>`__ and targets
+Python 3.13. From a checkout of this repository, install the dependencies
+into a virtual environment with:
+
+``uv sync``
+
+Supplying Cards
+---------------
+
+Card images are not distributed with this software (see the Disclaimer
+below). Place your own ``.png`` or ``.jpg`` card images into
+``dixit/static/cards/dixit/`` to build the default deck. See
+``dixit/static/cards/dixit/README.txt``. The server starts without any
+cards, but a game cannot deal a hand until enough images are present.
 
 Starting the Server
 -------------------
 
-``dixit``
+``uv run dixit``
 
 Then go to http://localhost:8888/.
+
+To start with a configuration override file (see "Configuring the Server"
+below), pass it as an argument:
+
+``uv run dixit config.local.json``
+
+Running with Docker
+-------------------
+
+A ``Dockerfile`` and ``docker-compose.yml`` are included. To build and run:
+
+``docker compose up --build``
+
+Then go to http://localhost:8888/. Card images placed in a ``./cards``
+directory on the host are mounted into the default deck. To use a
+configuration override, create ``config.local.json`` and uncomment the
+relevant lines in ``docker-compose.yml``.
 
 Configuring the Server
 ----------------------
