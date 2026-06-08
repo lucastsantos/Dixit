@@ -359,6 +359,9 @@ $(document).ready(function() {
                 votesHash = data.round.votesHash;
                 if (data.round.cards !== undefined) {
                     $.each(data.round.votes, function(puid, cid) {
+                        if (puid == data.round.clueMaker) {
+                            return;  // the clue maker doesn't vote — skip their token
+                        }
                         var card = $('#' + cid);
                         var randomLeft = Math.ceil(card.position().left + Math.random() * {{ display.Sizes.CARD_WIDTH - display.Sizes.TOKEN }});
                         var randomTop = Math.ceil(card.offset().top + Math.random() * {{ display.Sizes.CARD_HEIGHT - display.Sizes.TOKEN }});
@@ -369,10 +372,13 @@ $(document).ready(function() {
                     $('.token').fadeIn();
                     $.each(data.round.owners, function(puid, cid) {
                         var card = $('#' + cid);
-                        card.css({'background-color' : '#' + data.colours[puid],
-                                  'border-color' : '#' + data.colours[puid]});
-                        if (puid != data.round.clueMaker) {
-                            card.find('.small').fadeTo(400, 0.1);
+                        card.append('<div class="cardInfo">'
+                                  + '<div class="bunny" style="background-color:#' + data.colours[puid] + '">'
+                                  + '<img src="{{ display.Images.BUNNY_RUN }}" /></div>'
+                                  + '<span class="name">' + textToHtml(data.players[puid]) + '</span>'
+                                  + '</div>');
+                        if (puid == data.round.clueMaker) {
+                            card.addClass('narrator').css('border-color', '#' + data.colours[puid]);
                         }
                         card.attr('title', data.players[puid]);
                     });

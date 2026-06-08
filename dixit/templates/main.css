@@ -491,12 +491,46 @@ h1 {
   -moz-border-radius: 20px;
   border-radius: 20px;
   overflow: hidden;
-  height: {{ display.Sizes.CARD_HEIGHT }}px;
+}
+
+.card.narrator {
+  border-width: 4px;
+  /* border-color is set inline to the narrator's bunny colour */
 }
 
 .card .small {
+  display: block;
   width: {{ display.Sizes.CARD_WIDTH }}px;
   height: {{ display.Sizes.CARD_HEIGHT }}px;
+}
+
+.cardInfo {
+  width: {{ display.Sizes.CARD_WIDTH }}px;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 6px;
+  background-color: #fff;
+}
+
+.cardInfo .bunny {
+  height: {{ display.Sizes.CARD_INFO_BUNNY }}px;
+  width: {{ display.Sizes.CARD_INFO_BUNNY }}px;
+  flex: 0 0 auto;
+  border-radius: 4px;
+}
+
+.cardInfo .bunny img {
+  height: {{ display.Sizes.CARD_INFO_BUNNY }}px;
+}
+
+.cardInfo .name {
+  flex: 1 1 auto;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 

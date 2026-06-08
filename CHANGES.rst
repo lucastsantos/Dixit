@@ -30,12 +30,17 @@ Release history
 
 **Changed**
 
+- Reveal each card's owner with a coloured bunny and name label below the
+  card, and outline the clue maker's card in their colour, instead of tinting
+  the whole card.
 - Prevented players from voting for their own card during the vote phase.
 - Migrated to uv and Python 3.13, switched to ruff and GitHub Actions, and
   added Docker support.
 
 **Removed**
 
+- Removed the colour overlay that tinted and faded cards on reveal.
+- Stopped drawing a vote token for the clue maker, who does not vote.
 - Removed the magnifying-glass hover effect on cards.
 
 **Fixed**

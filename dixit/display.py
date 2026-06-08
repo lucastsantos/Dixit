@@ -49,6 +49,7 @@ class Sizes:
     BUNNY_PICKER = 70
     CARD_WIDTH = 250
     CARD_HEIGHT = 380
+    CARD_INFO_BUNNY = 30
     YOUR_TURN = 24
     TOKEN = 80
 
