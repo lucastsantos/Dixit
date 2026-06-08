@@ -539,6 +539,8 @@ h1 {
   cursor: crosshair;
   overflow-x: auto;
   display: inline-block;
+  max-width: 100%;
+  box-sizing: border-box;
   height: {{ display.Sizes.CARD_HEIGHT }}px;
   background-color: #FFF;
   padding: 5px;
@@ -549,6 +551,15 @@ h1 {
   -moz-border-radius-topright: 15px;
   border-top-left-radius: 15px;
   border-top-right-radius: 15px;
+}
+
+#hand .card {
+  /* Lay cards out as an inline row instead of floats so their horizontal
+     overflow contributes to #hand's scrollWidth, enabling overflow-x: auto
+     to scroll when the window is too narrow to show the whole hand. */
+  float: none;
+  display: inline-block;
+  vertical-align: top;
 }
 
 .toggleHand {

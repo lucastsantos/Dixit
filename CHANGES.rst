@@ -38,6 +38,11 @@ Release history
 
 - Removed the magnifying-glass hover effect on cards.
 
+**Fixed**
+
+- Made the player's hand horizontally scrollable when the window is too
+  narrow to show every card.
+
 
 0.1.2 (December 29, 2023)
 =========================
