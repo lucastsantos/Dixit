@@ -1,17 +1,9 @@
 Fork Notice
 -----------
 
-This repository is a fork of `arvoelke/Dixit <https://github.com/arvoelke/Dixit/>`__ with the following changes:
-
-- **Python:** 3.13.
-- **Packaging:** `uv <https://docs.astral.sh/uv/>`__, with a ``pyproject.toml``
-  manifest, a committed ``uv.lock``, and a pinned ``.python-version``.
-- **Formatting & linting:** `ruff <https://docs.astral.sh/ruff/>`__, run
-  through pre-commit hooks.
-- **Continuous integration:** GitHub Actions.
-- **Containerization:** ``Dockerfile`` and ``docker-compose.yml``.
-- **UI:** Removed the magnifying-glass hover effect on cards.
-- **Game logic:** Players are now prevented from voting for their own card during the vote phase.
+This repository is a fork of `arvoelke/Dixit <https://github.com/arvoelke/Dixit/>`__.
+All changes from the fork are described under ``0.1.3 (unreleased)`` in
+`CHANGES.rst <CHANGES.rst>`__.
 
 .. figure:: http://i.imgur.com/y5Zv9Az.png
    :alt: Revealing the correct card
@@ -29,7 +21,7 @@ Supplying Cards
 ---------------
 
 Card images are not distributed with this software (see the Disclaimer
-below). Place your own ``.png`` or ``.jpg`` card images into
+below). Place your own ``.png``, ``.jpg``, or ``.webp`` card images into
 ``dixit/static/cards/dixit/`` to build the default deck. See
 ``dixit/static/cards/dixit/README.txt``. The server starts without any
 cards, but a game cannot deal a hand until enough images are present.

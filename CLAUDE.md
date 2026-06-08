@@ -34,7 +34,7 @@ CI (`.github/workflows/ci.yml`, GitHub Actions) runs on push/PR: `uv sync`, then
 
 **User identity.** Each `User` has a private `uid` (stored in the `dixit_user` cookie, never sent to clients) and a public `puid` (used in all client-facing JSON); both are salted hashes from `utils.hash_obj`. `RequestHandler.prepare()` transparently creates a user from the cookie on every request, so handlers can assume `self.user`. The client only ever sees `puid`s.
 
-**Cards and decks.** `Application.find_cards` scans `static/cards/<folder>` for `.jpg`/`.png` files to build each `CardSet`; a `Deck` (one per `Game`) is the shuffled concatenation of the chosen sets. Card directories are git-ignored and `MANIFEST.in` prunes them from the package — the repo ships only the README placeholder.
+**Cards and decks.** `Application.find_cards` scans `static/cards/<folder>` for `.jpg`/`.png`/`.webp` files to build each `CardSet`; a `Deck` (one per `Game`) is the shuffled concatenation of the chosen sets. Card directories are git-ignored and `MANIFEST.in` prunes them from the package — the repo ships only the README placeholder.
 
 **Templates are Tornado-rendered Python.** `main.html`, `main.js`, and `main.css` are served through `tornado.web` template rendering (not as static files), with `dixit/display.py` constants and the `States`/`Commands`/`Limits` objects injected in. This keeps client-side values in sync with the server: e.g. editing a colour/path/size in `display.py` or a state enum in `core.py` automatically propagates to the rendered client — there are no duplicated literals to update.
 

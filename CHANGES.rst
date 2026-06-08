@@ -19,6 +19,26 @@ Release history
    - Removed
    - Fixed
 
+0.1.3 (unreleased)
+==================
+
+**Added**
+
+- Added ``.webp`` support for card images.
+- Refactored ``BunnyPalette`` into a ``StrEnum`` with a dynamic colour grid
+  and added more colours.
+
+**Changed**
+
+- Prevented players from voting for their own card during the vote phase.
+- Migrated to uv and Python 3.13, switched to ruff and GitHub Actions, and
+  added Docker support.
+
+**Removed**
+
+- Removed the magnifying-glass hover effect on cards.
+
+
 0.1.2 (December 29, 2023)
 =========================
 
