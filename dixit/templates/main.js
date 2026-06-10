@@ -382,6 +382,7 @@ $(document).ready(function() {
                         }
                         card.attr('title', data.players[puid]);
                     });
+                    layoutCards();
                 }
             }
 
@@ -420,6 +421,9 @@ $(document).ready(function() {
     function updateCards(cards, containerId) {
         if (cards === undefined) {
             $(containerId).html('');
+            if (containerId === '#cards') {
+                $('#cards').css('width', '');
+            }
             return
         }
         var html = [];
@@ -427,7 +431,37 @@ $(document).ready(function() {
             html.push(cardCell(card));
         });
         $(containerId).html(html.join('')).fadeIn();
+        if (containerId === '#cards') {
+            layoutCards();
+        }
     }
+
+    // Constrain #cards' width so the floated cards wrap into evenly balanced
+    // rows: everything on one row if it fits, otherwise split as evenly as
+    // possible (e.g. 9 cards -> 5 + 4 rather than 7 + 2).
+    var CARD_OUTER = {{ display.Sizes.CARD_WIDTH }} + 12;  // card + margins + max (narrator) border
+    function layoutCards() {
+        var n = $('#cards .card').length;
+        if (n === 0) {
+            $('#cards').css('width', '');
+            return;
+        }
+        var avail = $(window).width() - 20;
+        var maxPerRow = Math.max(1, Math.floor(avail / CARD_OUTER));
+        var perRow;
+        if (n <= maxPerRow) {
+            perRow = n;
+        } else {
+            var rows = Math.ceil(n / maxPerRow);
+            perRow = Math.ceil(n / rows);
+        }
+        $('#cards').css('width', (perRow * CARD_OUTER) + 'px');
+    }
+    var layoutCardsTimer;
+    $(window).resize(function() {
+        clearTimeout(layoutCardsTimer);
+        layoutCardsTimer = setTimeout(layoutCards, 100);
+    });
 
 
     // Game board communication

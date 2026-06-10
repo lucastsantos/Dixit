@@ -34,6 +34,10 @@ Release history
   card, and outline the clue maker's card in their colour, instead of tinting
   the whole card.
 - Prevented players from voting for their own card during the vote phase.
+- Distribute the submitted cards into evenly balanced rows during the vote
+  phase instead of overfilling the first row.
+- Distinguish the player's hand from the voting table with a tinted tray, an
+  accent top border, and a drop shadow.
 - Migrated to uv and Python 3.13, switched to ruff and GitHub Actions, and
   added Docker support.
 
@@ -47,6 +51,8 @@ Release history
 
 - Made the player's hand horizontally scrollable when the window is too
   narrow to show every card.
+- Kept the last row of voting cards from hiding behind the collapsed hand
+  toggle bar.
 
 
 0.1.2 (December 29, 2023)

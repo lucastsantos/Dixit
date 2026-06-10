@@ -191,6 +191,36 @@ class Bot:
             stop.wait(self.poll)
 
 
+def monitor(client, gid, stop, poll=1.0):
+    """Polls the board and prints scores + deck count whenever a round ends.
+
+    The server bumps `turn` (and may flip to END) the instant the last vote of a
+    round lands, so a change in `turn` is our signal that a round just finished.
+    """
+    last_turn = None
+    rnd_num = 0
+    while not stop.is_set():
+        try:
+            board = json.loads(client.get(f"/game/{gid}/{GET_BOARD}"))
+            turn, state = board.get("turn"), board.get("state")
+            ended = state == END
+            if last_turn is not None and (turn != last_turn or ended):
+                rnd_num += 1
+                names = board.get("players", {})
+                scores = board.get("scores", {})
+                ranked = sorted(names, key=lambda p: scores.get(p, 0), reverse=True)
+                line = ", ".join(f"{names[p]}: {scores.get(p, 0)}" for p in ranked)
+                left, size = board.get("left", "?"), board.get("size", "?")
+                label = "final" if ended else f"round {rnd_num}"
+                logger.info("=== %s scores -- %s | deck %s/%s", label, line, left, size)
+                if ended:
+                    break
+            last_turn = turn
+        except Exception as exc:
+            logger.warning("monitor error: %s", exc)
+        stop.wait(poll)
+
+
 def create_game(client, base_url, num_card_sets, max_players):
     """Creates a game via /create and returns its gid."""
     data = [("card_sets", str(i)) for i in range(num_card_sets)]
@@ -270,6 +300,11 @@ def main(argv=None):
 
     stop = threading.Event()
     threads = [threading.Thread(target=b.run, args=(stop,), daemon=True) for b in bots]
+    threads.append(
+        threading.Thread(
+            target=monitor, args=(Client(args.url), gid, stop, args.poll), daemon=True
+        )
+    )
     for t in threads:
         t.start()
 
