@@ -56,6 +56,11 @@
                             min="{{ limits.min_clue_length }}" max="{{ limits.max_clue_length }}" size="4" required /></td>
             </tr>
             <tr>
+                <td><label>Cards per Person</label></td>
+                <td><input type="text" name="cards_per_person" value="6"
+                            min="{{ limits.min_cards_per_person }}" max="{{ limits.max_cards_per_person }}" size="4" required /></td>
+            </tr>
+            <tr>
                 <td><label>Deck Building</label></td>
                 <td>
                     {% for i, card_set in enumerate(card_sets) %}

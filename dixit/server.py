@@ -88,7 +88,11 @@ class MainCSSHandler(tornado.web.RequestHandler):
 
     def get(self):
         self.set_header("Content-Type", "text/css")
-        self.render("main.css", display=display, cards_per_person=Game.CARDS_PER_PERSON)
+        self.render(
+            "main.css",
+            display=display,
+            cards_per_person=self.application.limits.max_cards_per_person,
+        )
 
 
 class AdminHandler(RequestHandler):
@@ -160,6 +164,7 @@ class CreateHandler(RequestHandler):
             max_score = int(max_score)
             max_players = int(self.get_argument("max_players"))
             max_clue_length = int(self.get_argument("max_clue_length"))
+            cards_per_person = int(self.get_argument("cards_per_person"))
         except ValueError as exc:
             raise APIError(Codes.NOT_AN_INTEGER, exc)
 
@@ -169,6 +174,11 @@ class CreateHandler(RequestHandler):
             or (not limits.min_players <= max_players <= limits.max_players)
             or (not limits.min_score <= max_score <= limits.max_score)
             or (not limits.min_clue_length <= max_clue_length <= limits.max_clue_length)
+            or (
+                not limits.min_cards_per_person
+                <= cards_per_person
+                <= limits.max_cards_per_person
+            )
         ):
             raise APIError(Codes.ILLEGAL_RANGE)
 
@@ -181,6 +191,7 @@ class CreateHandler(RequestHandler):
             max_score,
             max_clue_length,
             limits,
+            cards_per_person,
         )
         self.application.games.append(game)
         self.write(str(len(self.application.games) - 1))

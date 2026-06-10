@@ -26,6 +26,9 @@ class Limits:
         self.min_clue_length = self._get_int(limit_config, "min_clue_length")
         self.max_clue_length = self._get_int(limit_config, "max_clue_length")
 
+        self.min_cards_per_person = self._get_int(limit_config, "min_cards_per_person")
+        self.max_cards_per_person = self._get_int(limit_config, "max_cards_per_person")
+
         self.max_message = self._get_int(limit_config, "max_message")
 
         self.min_user_name = self._get_int(limit_config, "min_user_name")
@@ -172,6 +175,7 @@ class Game:
         max_score,
         max_clue_length,
         limits,
+        cards_per_person=CARDS_PER_PERSON,
     ):
         """Initializes the game with the parameters from CreateHandler."""
         self.host = host
@@ -181,6 +185,7 @@ class Game:
         self.max_players = max_players
         self.max_score = max_score
         self.max_clue_length = max_clue_length
+        self.cards_per_person = cards_per_person
 
         self.players = {}
         self.order = []
@@ -259,7 +264,7 @@ class Game:
             raise APIError(Codes.NOT_ENOUGH_PLAYERS)
         random.shuffle(self.order)
         for user in self.players:
-            for _ in range(self.CARDS_PER_PERSON):
+            for _ in range(self.cards_per_person):
                 card = self.deck.deal()
                 if card is None:
                     self.init_game()  # rewind the dealing

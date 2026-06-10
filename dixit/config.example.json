@@ -26,6 +26,9 @@
         "min_clue_length": 5,
         "max_clue_length": 100000,
 
+        "min_cards_per_person": 4,
+        "max_cards_per_person": 10,
+
         "max_message": 1024,
 
         "min_user_name" : 3,
