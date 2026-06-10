@@ -393,8 +393,18 @@ def has_suffix(name, suffixes):
 
 
 def find_cards(folder, suffixes=(".jpg", ".png", ".webp")):
-    """Returns all urls for a given folder, matching the given suffixes."""
+    """Returns all urls for a given folder, matching the given suffixes.
+
+    A missing card folder yields an empty list (with a warning) rather than
+    crashing startup: card directories are git-ignored and pruned from the
+    package, so they may legitimately be absent in a fresh deployment.
+    """
     path = os.path.join(os.path.dirname(__file__), display.WebPaths.CARDS, folder)
+    if not os.path.isdir(path):
+        logger.warning(
+            "Card folder %r not found at %s; treating as empty.", folder, path
+        )
+        return []
     return [
         url_join(display.WebPaths.CARDS, folder, name)
         for name in os.listdir(path)
