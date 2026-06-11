@@ -484,6 +484,7 @@ h1 {
 
 .card {
   float: left;
+  position: relative;
   margin-left: 2px;
   margin-right: 2px;
   border: 1px solid #bbb;
@@ -550,6 +551,13 @@ h1 {
 
 #cards {
   cursor:crosshair;
+  /* Override .centered's display:table: lay the cards out as wrapping flex
+     lines so uneven card heights (the narrator's thicker border, the
+     post-vote info strip) never make a float snag on a taller neighbour. The
+     width set by layoutCards() controls how many cards land on each line. */
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
 }
 
 .token {

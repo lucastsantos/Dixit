@@ -6,8 +6,8 @@ var ALERT_TITLE = TITLE + ' (!)';
 // Refresh each element every X millesconds
 var GAMELIST_INTERVAL = 10000;
 var USERLIST_INTERVAL = 20000;
-var CHATROOM_INTERVAL = 3000;
-var GAMEBOARD_INTERVAL = 4000;
+var CHATROOM_INTERVAL = 4000;
+var GAMEBOARD_INTERVAL = 3000;
 
 
 // Summary of game state for an observer
@@ -363,8 +363,11 @@ $(document).ready(function() {
                             return;  // the clue maker doesn't vote — skip their token
                         }
                         var card = $('#' + cid);
-                        var randomLeft = Math.ceil(card.position().left + Math.random() * {{ display.Sizes.CARD_WIDTH - display.Sizes.TOKEN }});
-                        var randomTop = Math.ceil(card.offset().top + Math.random() * {{ display.Sizes.CARD_HEIGHT - display.Sizes.TOKEN }});
+                        // Position relative to the card itself (the card is the
+                        // token's offset parent), so tokens stay pinned to their
+                        // card no matter how the rows later reflow.
+                        var randomLeft = Math.ceil(Math.random() * {{ display.Sizes.CARD_WIDTH - display.Sizes.TOKEN }});
+                        var randomTop = Math.ceil(Math.random() * {{ display.Sizes.CARD_HEIGHT - display.Sizes.TOKEN }});
                         card.append('<div class="token" title="' + textToHtml(data.players[puid])
                                   + '" style="left:' + randomLeft + 'px;top:' + randomTop
                                   + 'px;background-color:#' + data.colours[puid] + '">&nbsp;</div>');
